@@ -8,20 +8,10 @@ from reportlab.pdfbase.ttfonts import TTFont
 import sys
 
 args = sys.argv
-
-
 path_file = args[1]
 file_sheet = args[2]
 file_name = args[3]
-end_index = args[4]
-total = args[5]
-date = args[6]
-fcol = args[7]
-lcol = args[8]
-if (len(args) != 9):
-    print('Error')
-    exit()
-
+date = args[4]
 
 pdfmetrics.registerFont(TTFont('Arial', 'Arial.ttf'))
 
@@ -43,11 +33,48 @@ image_height = image_width/ratio
 margin = 10
 paragraph = 4
 
-#invoice related information
-company_name = "Leo's cuisine"
+def getLcolIndex():
+    i = 1
+    while (sheet.cell(row = 3, column = i ).value != None):
+        i+= 1
+    return i
 
 #fcol - the index where the items start
 #lcol - the last index where the items end
+def getTotalIndex():
+    goal = "total"
+    i = 1
+    while i < 30: # Keep this cuz not I do not want to get an infinite loop
+        # print(i)
+        if (sheet.cell(row = 1,column = i).value == None):
+            i += 1
+        elif (sheet.cell(row = 1,column = i).value.lower() == goal):
+            return i
+        else:
+            i+=1
+    return i
+
+def getLastIndex():
+    i = 1
+    while (sheet.cell(row = i, column = 1 ).value != None):
+        i+= 1
+    return i
+
+end_index = getLastIndex() - 1
+total = getTotalIndex()
+
+fcol = 5 #fcol is always 5
+lcol = getLcolIndex() - 1
+
+if (len(args) != 5):
+    print('Error')
+    exit()
+
+
+
+#invoice related information
+company_name = "Leo's cuisine"
+
 def items(row, fcol, lcol, tab):
     output = []
     innerlst = []
@@ -77,6 +104,10 @@ def create_invoice():
     extra_dic['fried'] = ['gato arouille', 'fried noodles', 'catless']
     extra_dic['boulette'] = ['kniouk yens', 'sao mai', 'long']
     print(sheet)
+    print("TOtal index " + str(getTotalIndex()) + "ad")
+    print("\nLast index" + str(getLastIndex()))
+    print("\nLast col index" + str(getLcolIndex()))
+
     for i in range(3, int(end_index) + 1):
         #Accumulator
         products = []

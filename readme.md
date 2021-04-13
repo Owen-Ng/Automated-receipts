@@ -14,4 +14,14 @@ The following is how you should run it in command line:
 
 python receiptconvert.py pathname sheetname pdfName last_row total_index Date fcol lcol
 ```
-Note that s just the brute force version better one coming
+
+Version 2.0 April 5
+```
+pathname - is the location of the excel file
+sheetname - is the sheet that will be used from the excel file
+pdfName - is the name of the pdf file upon completion
+Date - the Date
+
+python receiptconvert.py pathname sheetname pdfName Date 
+
+```
